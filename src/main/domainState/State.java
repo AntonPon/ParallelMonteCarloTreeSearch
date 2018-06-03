@@ -1,6 +1,9 @@
 package main.domainState;
 
-public interface State<E> extends Comparable<E> {
-    E getState();
+public interface State extends Comparable<String> {
+    String getState();
     boolean isTerminated();
+
+
+    State clone();
 }

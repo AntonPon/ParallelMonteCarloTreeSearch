@@ -2,8 +2,11 @@ package main;
 
 import main.domainAction.Action;
 import main.domainState.State;
+import main.simulation.SimulationImpl;
 
-import java.lang.management.GarbageCollectorMXBean;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.concurrent.*;
 
 public class DecisionTree {
 
@@ -20,17 +23,36 @@ public class DecisionTree {
         this.totalSimulationNumber = 0;
     }
 
-    public Action getBestMove(){
+    public GameNode getBestMove(){
         // for simplicity, my restrictions for searching the best way will be 4 loops of simulations
         for (int i = 0; i < NUMBER_OF_SEARCHING_LOOPS; i++){
             GameNode startSimuation = getSimulationStartNode();
             simulations(startSimuation);
         }
-        return getNextBestNode(head).getAction();
+        System.out.println(head);
+        return getNextBestNode(head);
     }
 
     private void simulations(GameNode start){
+        System.out.println("start simulation");
         int coreNumber = Runtime.getRuntime().availableProcessors();
+        List<Future<SimulationResult>> results = new ArrayList();
+        ExecutorService executor = Executors.newFixedThreadPool(coreNumber);
+        for (int i = 0; i < coreNumber; i++){
+            results.add(executor.submit(new SimulationImpl(start.getState().clone(), game.clone())));
+        }
+
+        for (Future<SimulationResult> simulationResult: results){
+            try {
+                SimulationResult simRes = simulationResult.get();
+                updateWeights(simRes.getPayOff(), 1, start);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            } catch (ExecutionException e) {
+                e.printStackTrace();
+            }
+        }
+        executor.shutdown();
     }
 
 
@@ -76,10 +98,11 @@ public class DecisionTree {
 
     private void updateWeights(int wins, int totalRuns, GameNode leafNode){
         GameNode current = leafNode;
-        while(!current.isRoot()){
+        while(current != null){
             current.update(totalRuns, wins);
             current = current.getFather();
         }
+
     }
 
 

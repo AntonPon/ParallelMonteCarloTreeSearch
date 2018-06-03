@@ -2,11 +2,11 @@ package main.simulation;
 
 import main.Game;
 import main.GameNode;
+import main.SimulationResult;
 
-public interface Simulation extends Runnable{
+import java.util.concurrent.Callable;
 
-
-    void simulate(GameNode startNode, Game game);
+public interface Simulation extends Callable<SimulationResult> {
 
 
 }

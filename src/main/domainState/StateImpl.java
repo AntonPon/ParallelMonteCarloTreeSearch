@@ -1,6 +1,6 @@
 package main.domainState;
 
-public class StateImpl implements State<String> {
+public class StateImpl implements State{
 
     private String state;
 
@@ -26,5 +26,10 @@ public class StateImpl implements State<String> {
     @Override
     public int compareTo(String s) {
         return this.state.compareTo(s);
+    }
+
+    @Override
+    public StateImpl clone(){
+        return new StateImpl(state);
     }
 }

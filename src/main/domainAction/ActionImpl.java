@@ -2,25 +2,19 @@ package main.domainAction;
 
 import java.util.Random;
 
-public class ActionImpl implements Action<Integer> {
+public class ActionImpl implements Action<String> {
 
 
-    private int maxNumber;
+    private String maxNumber;
 
-    public ActionImpl(int maxNumber){
+    public ActionImpl(String maxNumber){
         this.maxNumber = maxNumber;
     }
 
 
-    public int getMaxValue(){
-        return maxNumber;
-    }
-
-
-
     @Override
-    public Integer getAction() {
-        return new Integer(this.maxNumber);
+    public String getAction() {
+        return maxNumber;
     }
 
 

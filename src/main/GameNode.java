@@ -63,7 +63,7 @@ public class GameNode {
     public boolean containSons(State state) {
         if (sons.size() > 0){
             for (GameNode node: sons){
-                if(node.getState().compareTo(state) == 0){
+                if(node.getState().compareTo(state.getState()) == 0){
                     return true;
                 }
             }
@@ -81,7 +81,8 @@ public class GameNode {
 
     @Override
     public String toString(){
-        return "total visits: " + getTotalVisit() + " wins visits" + getWinVisit();
+        return "total visits: " + getTotalVisit() + " wins visits " + getWinVisit() + "\n State is " + state + "\n Action is" + action;
     }
+
 
 }
