@@ -18,6 +18,11 @@ public class GameNode {
         return state;
     }
 
+    public boolean isLeaf(){
+        return sons.size() == 0;
+    }
+
+
     public Action getAction(){
         return action;
     }
@@ -66,5 +71,17 @@ public class GameNode {
         return false;
     }
 
+    public void addSons(State state, Action action){
+        sons.add(new GameNode(action, state, this));
+    }
+
+    public List<GameNode> getSons(){
+        return sons;
+    }
+
+    @Override
+    public String toString(){
+        return "total visits: " + getTotalVisit() + " wins visits" + getWinVisit();
+    }
 
 }
