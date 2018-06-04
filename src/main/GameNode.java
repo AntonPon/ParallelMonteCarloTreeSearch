@@ -81,7 +81,7 @@ public class GameNode {
 
     @Override
     public String toString(){
-        return "total visits: " + getTotalVisit() + " wins visits " + getWinVisit() + "\n State is " + state + "\n Action is" + action;
+        return "total visits: " + getTotalVisit() + " wins visits " + getWinVisit() + "\n State is " + state + "\n Action is " + action;
     }
 
 

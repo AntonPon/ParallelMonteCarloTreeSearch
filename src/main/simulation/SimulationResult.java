@@ -17,7 +17,6 @@ public class SimulationResult {
     }
 
     public State getNode() {
-
         return node;
     }
 }

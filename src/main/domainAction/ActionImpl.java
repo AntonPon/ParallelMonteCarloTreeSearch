@@ -21,7 +21,7 @@ public class ActionImpl implements Action<String> {
 
     @Override
     public String toString(){
-        return "The number of the action: " +(this.maxNumber);
+        return (this.maxNumber);
     }
 
 }

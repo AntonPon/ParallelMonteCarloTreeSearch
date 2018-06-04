@@ -31,12 +31,10 @@ public class DecisionTree {
             GameNode startSimuation = getSimulationStartNode();
             simulations(startSimuation);
         }
-        // System.out.println(head);
         return getNextBestNode(head);
     }
 
     private void simulations(GameNode start){
-       // System.out.println("start simulation");
         int coreNumber = Runtime.getRuntime().availableProcessors();
         List<Future<SimulationResult>> results = new ArrayList();
         ExecutorService executor = Executors.newFixedThreadPool(coreNumber);
@@ -85,24 +83,15 @@ public class DecisionTree {
                 result = node;
 
             }
-            //System.out.println(" ucb results "+ ucb(result));
-            /*else{imRes.getPayOff(), 1, start);
-                if(){
-                    result = node;
-                }
-            }*/
         }
-
         return result;
     }
 
     private double ucb(GameNode current){
         double c = Math.sqrt(2);
         if (current.getTotalVisit() == 0){
-           // System.out.println();
             return Double.POSITIVE_INFINITY;
         }
-       // System.out.println("winning ratio "+ Math.log(totalSimulationNumber));
         return current.getWinnerRatio() + c * Math.sqrt(Math.log(totalSimulationNumber)/current.getTotalVisit());
     }
 

@@ -16,12 +16,10 @@ public class SimulationImpl implements Simulation {
 
 
     private int simulate(State startState, Game game) {
-        //System.out.println("actual simulation");
         State currentState = startState;
         while(!currentState.isTerminated()){
             Action action = null;
             currentState = game.getState(currentState, action);
-          //  System.out.println(currentState);
         }
         return game.getPrice(currentState);
     }
