@@ -1,4 +1,4 @@
-package main;
+package main.simulation;
 
 import main.domainState.State;
 

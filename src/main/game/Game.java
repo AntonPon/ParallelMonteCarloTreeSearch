@@ -1,4 +1,4 @@
-package main;
+package main.game;
 
 import main.domainAction.Action;
 import main.domainAction.ActionImpl;
@@ -51,17 +51,18 @@ public class Game {
 
     public State getState(State state,  Action action){
         currentIteration ++;
-        System.out.println("state number " + currentIteration);
+       // System.out.println("state number " + currentIteration);
         int currentNumber = new Integer(state.getState().replaceAll("\\D+", ""));
 
         if (isTerminated()){
-            int resultGame  = 0;
+            int resultGame  = random.nextInt(2);
+            /*int resultGame  = 0;
             if (currentNumber >= 0){
                 resultGame = 1;
-            }
+            }*/
             return new StateImpl("terminated" + resultGame);
         }
-        currentNumber = (int) Math.pow(-1, random.nextInt(2)) * (currentNumber + random.nextInt(30));
+        currentNumber = (int) Math.pow(-1, random.nextInt(100)) * (currentNumber + random.nextInt(30));
         return new StateImpl("not final state, points = " + currentNumber);
     }
 

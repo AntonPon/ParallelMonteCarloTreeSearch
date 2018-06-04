@@ -2,7 +2,9 @@ package main;
 
 import main.domainAction.Action;
 import main.domainState.State;
+import main.game.Game;
 import main.simulation.SimulationImpl;
+import main.simulation.SimulationResult;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -14,7 +16,7 @@ public class DecisionTree {
     private Game game;
     private int totalSimulationNumber;
     private static final int VISITS_RATIO  = 4;
-    private static final int NUMBER_OF_SEARCHING_LOOPS = 4;
+    private static final int NUMBER_OF_SEARCHING_LOOPS = 20;
 
 
     public DecisionTree(Action action, State state, Game game){
@@ -29,12 +31,12 @@ public class DecisionTree {
             GameNode startSimuation = getSimulationStartNode();
             simulations(startSimuation);
         }
-        System.out.println(head);
+        // System.out.println(head);
         return getNextBestNode(head);
     }
 
     private void simulations(GameNode start){
-        System.out.println("start simulation");
+       // System.out.println("start simulation");
         int coreNumber = Runtime.getRuntime().availableProcessors();
         List<Future<SimulationResult>> results = new ArrayList();
         ExecutorService executor = Executors.newFixedThreadPool(coreNumber);
@@ -45,6 +47,8 @@ public class DecisionTree {
         for (Future<SimulationResult> simulationResult: results){
             try {
                 SimulationResult simRes = simulationResult.get();
+                totalSimulationNumber++;
+               // System.out.println("payoff " + simRes.getPayOff());
                 updateWeights(simRes.getPayOff(), 1, start);
             } catch (InterruptedException e) {
                 e.printStackTrace();
@@ -61,9 +65,9 @@ public class DecisionTree {
         while (!result.isLeaf()){
             result = getNextBestNode(result);
         }
-        if (result.getTotalVisit() >= VISITS_RATIO){
+        if (result.isRoot() || result.getTotalVisit() >= VISITS_RATIO){
             for(Action action: game.getActions(result.getState())){
-                result.addSons( game.getState(result.getState(), action), action);
+                result.addSons(game.getState(result.getState(), action), action);
             }
             result = getNextBestNode(result);
         }
@@ -76,13 +80,17 @@ public class DecisionTree {
         }
         GameNode result = null;
         for (GameNode node: prev.getSons()){
-            if (result == null){
+
+            if (result == null || ucb(result) < ucb(node)){
                 result = node;
-            }else{
-                if(ucb(result) < ucb(node)){
+
+            }
+            //System.out.println(" ucb results "+ ucb(result));
+            /*else{imRes.getPayOff(), 1, start);
+                if(){
                     result = node;
                 }
-            }
+            }*/
         }
 
         return result;
@@ -91,8 +99,10 @@ public class DecisionTree {
     private double ucb(GameNode current){
         double c = Math.sqrt(2);
         if (current.getTotalVisit() == 0){
-            return Double.MAX_VALUE;
+           // System.out.println();
+            return Double.POSITIVE_INFINITY;
         }
+       // System.out.println("winning ratio "+ Math.log(totalSimulationNumber));
         return current.getWinnerRatio() + c * Math.sqrt(Math.log(totalSimulationNumber)/current.getTotalVisit());
     }
 

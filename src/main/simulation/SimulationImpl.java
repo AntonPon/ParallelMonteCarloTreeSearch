@@ -1,8 +1,6 @@
 package main.simulation;
 
-import main.Game;
-import main.GameNode;
-import main.SimulationResult;
+import main.game.Game;
 import main.domainAction.Action;
 import main.domainState.State;
 
@@ -18,12 +16,12 @@ public class SimulationImpl implements Simulation {
 
 
     private int simulate(State startState, Game game) {
-        System.out.println("actual simulation");
+        //System.out.println("actual simulation");
         State currentState = startState;
         while(!currentState.isTerminated()){
             Action action = null;
             currentState = game.getState(currentState, action);
-            System.out.println(currentState);
+          //  System.out.println(currentState);
         }
         return game.getPrice(currentState);
     }
